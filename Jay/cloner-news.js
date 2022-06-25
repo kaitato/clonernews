@@ -71,4 +71,29 @@ const jobsurl = 'https://hacker-news.firebaseio.com/v0/askstories.json';
 const top1url = 'https://hacker-news.firebaseio.com/v0/askstories.json';
 const updsurl = 'https://hacker-news.firebaseio.com/v0/askstories.json';
 
-Promise.all(urls.map(url=>fetch(url))).then(responses => responses.forEach(response => response.json().then(ids=> ids.forEach(id=>fetchingById(id)))))
+// let askstory= urls.map(url=>fetch(url)).length
+// console.log(askstory);
+// Promise.all(urls.map(url=>fetch(url))).then(responses => responses.forEach(response => response.json().then(ids=> ids.forEach(id=>fetchingById(id)))))
+const LoadData=async()=>{
+  try{
+const  results=await Promise.all([
+  fetch(ask1url),
+  fetch(showurl),
+  fetch(jobsurl),
+  fetch(top1url),
+  fetch(updsurl),
+])
+const dataPromises=results.map(results => results.json())  //.then(ids=> ids.forEach(id=>fetchingById(id)))
+const finalData= await Promise.all(dataPromises);
+// Alternate way of writing  const finalData=await Promise.all(results.map(results=>results.json().then(ids=> ids.forEach(id=>fetchingById(id)))));
+//console.log(finalData);
+return(finalData)
+} catch (err){
+console.error(err);
+}
+};
+
+(async ()=>{
+  const data = await LoadData();
+  console.log(data)
+})();
