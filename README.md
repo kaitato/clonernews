@@ -1,8 +1,8 @@
 ## Cloner News (Raid)
 
-# Cloner News → Weekend Working.
+# Cloner News → Weekend Working !
 
-• Fellowship → The JS Piscine (Raid → Cloner News) !
+• Fellowship → The JS Piscine (Raid → Cloner News).
 
 ### Objectives
 
