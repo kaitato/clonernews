@@ -1,11 +1,7 @@
-
-
-//lets start!!!
-//A little push team mates!! … we will get there.
-
-// endpoints for the cn
-
-
+/* The Cloner News JavaScript Program.
+   Date: 25 june 2022
+   endpoints for the Cloner News API
+*/
 const BASEURL = 'https://hacker-news.firebaseio.com/v0/';
 const TOPSTORIES = 'topstories.json';
 const NEWSTORIES = 'newstories.json';
@@ -14,8 +10,7 @@ const ASKSTORIES = 'askstories.json';
 const SHOWSTORIES = 'showstories.json';
 const JOBSTORIES = 'jobstories.json';
 
-
-// top nav elements
+/* Top Navigation elements */
 const topNav = document.getElementById('top');
 const newNav = document.getElementById('new');
 const bestNav = document.getElementById('best');
@@ -23,8 +18,6 @@ const askNav = document.getElementById('ask');
 const showNav = document.getElementById('show');
 const jobNav = document.getElementById('jobs');
 const savedNav = document.getElementById('saved');
-
-
 
 const maincontainer = document.getElementById('base');
 // create the container element
@@ -94,7 +87,7 @@ function updateLastUpdate() {
     var now = new Date();
     updatedTime.innerText = `Last updated: ${getNiceTime(now.getTime() / 1000)}`;
     container.appendChild(updatedTime);
-}
+};/*updateLastUpdate*/
 
 // get saved stories
 function getSavedStories(){
@@ -113,7 +106,7 @@ function getSavedStories(){
     container.appendChild(recordsDiv);
     
     // check if there are any saved stories
-    if(records.length > 0){
+    if (records.length > 0){
         recordsDivHeader.innerText = `${records.length} saved stor${records.length === 1 ? 'y' : 'ies' }`;
 
         for(record of records){
@@ -122,10 +115,8 @@ function getSavedStories(){
         }
     } else {
         recordsDivHeader.innerText = 'No saved stories';
-    }
-    
-
-}
+    };/*if*/
+};/*getSavedStories*/
 
 // create a saved story card and return it
 function createdSavedStoryCard(record){
@@ -142,8 +133,6 @@ function createdSavedStoryCard(record){
     var url = record.story.url ? record.story.url : `https://hacker-news.firebaseio.com/v0/${record.story.id}`; 
     recordTitle.setAttribute('href', url);
     recordTitle.setAttribute('target', '_blank');
-
-  
 
     // date saved
     var savedDiv = document.createElement('div');
@@ -164,19 +153,18 @@ function createdSavedStoryCard(record){
     recordCard.appendChild(recordHeadline);
     recordCard.appendChild(recordSubtext);
 
-
     return recordCard;
-}
+};/*createdSavedStoryCard*/
 
-
-// get the top HN stories
-function getStories(feed){
+// get the top HN stories asynchronously.
+async function getStories(feed){
     fetch(BASEURL + feed)
         .then(response => {
+            console.log(`Get Stories → Response:`, response);
             return response.json();
         })
         .then(data => {
-            console.log(`Num stories: ${data.length}`);
+            console.log(`Get Stories → Number of Stories: ${data.length}`);
             updateLastUpdate();
             //limit for now
             for(let i = 0; i < data.length && i < 50 ; i++){
@@ -184,10 +172,9 @@ function getStories(feed){
             }
         })
         .catch(err => {
-            console.log('error fetching ' + err);
+            console.log('Error fetching ' + err);
         });
-}
-
+};/*getStories*/
 
 // get top-level details about a story
 function getStoryDetails(itemId){
@@ -195,17 +182,18 @@ function getStoryDetails(itemId){
 
     fetch(storyURL)
         .then(respose => {
+            console.log(`Get Story Details → Respose:`, respose);
             return respose.json();
         })
         .then(data => {
+            console.log(`Get Story Details → Length of Story: ${data.length}; Data: ${data.title}`);
             createStoryCard(data);
             stories.push(data);
         })
         .catch(err => {
-            console.log(`error fetching story ${itemId} with ${err}`);
+            console.log(`Error fetching story ${itemId} with ${err}`);
         });
-
-}
+};/*getStoryDetails*/
 
 function getComment(commentId, commentCard){
     let url = `https://hacker-news.firebaseio.com/v0/item/${commentId}.json`
@@ -220,7 +208,7 @@ function getComment(commentId, commentCard){
         .catch(err => {
             console.log(`error fetching comment ${commentId} with ${err}`);
         })
-}
+};/*getComment*/
 
 function createComment(commentData, parentCard){
     if(!commentData.deleted){
@@ -341,7 +329,8 @@ function pushRecord(record){
 }
 
 // creates HTML markup for a story
-function createStoryCard(story){
+function createStoryCard(story) {
+    console.log('Create Story Card entered.');
 
     // story div
     let storyCard = document.createElement('div');
@@ -354,25 +343,29 @@ function createStoryCard(story){
 
     // story title and domain
     let storyTitle = document.createElement('a');
-    storyTitle.setAttribute('class', 'title')
+    storyTitle.setAttribute('class', 'title');
     storyTitle.setAttribute('target', '_blank');
     storyTitle.innerHTML = story.title;
+
+    if (story.text == undefined) {
+    } else {
+        storyTitle.innerHTML += `<BR><span style="color:red;font-size:12px">${story.type} text: </span>` + `<span style="color:blue;font-size:12px">` + story.text + `</span>`;
+    }/*if*/
 
     let domain = document.createElement('span');
     domain.setAttribute('class', 'domain');
 
     // check if there is a associated url
     if(story.hasOwnProperty('url')){
-       // domain.textContent = `(${getDomain(story.url)})`;
+      // domain.textContent = `(${getDomain(story.url)})`;
       // story.url
         storyTitle.setAttribute('href', "#");
-        
-
     } else {
         // set the url to the story itself
+        console.log('Create Story Card, does not have own property.');
         var url = `https://hacker-news.firebaseio.com/v0/item/${story.id}.json`
         domain.textContent = `(${getDomain(url)})`;
-        storyTitle.setAttribute('href', url);   
+        storyTitle.setAttribute('href', url);
         storyCard.classList.add('self-story');
     }
 //
@@ -410,33 +403,46 @@ function createStoryCard(story){
     commentToggle.setAttribute('class', 'comment-toggle');
 
     // check if the story has any comments
-    if(story.descendants){
-        
-        commentToggle.innerText = `View ${story.descendants > 1 ? `${story.descendants} comments`  : `${story.descendants} comment`}`;
-        
-        if(story.descendants >= 100) commentToggle.classList.add('hot');
+    if (story.descendants){
+       console.log('Create Story Card → There are some comments');
+       commentToggle.innerText = `View ${story.descendants > 1 ? `${story.descendants} comments`  : `${story.descendants} comment`}`;
+       if (story.text == undefined) {
+       } else {
+         commentToggle.innerText += ' and Post Text.';
+       };/*if*/
 
-        commentToggle.classList.add('has-comments');
-        
-        commentToggle.addEventListener('click', function(){
+       if (story.descendants >= 100) commentToggle.classList.add('hot');
+
+       commentToggle.classList.add('has-comments');
+
+       commentToggle.addEventListener('click', function(){
             var self = this;
             var storyDiv = this.parentNode.parentNode;
             selectStory(story.id, storyDiv);
-            
+
             var commentDiv = storyDiv.querySelector('.comments');
-            if(commentDiv.classList.contains('is-visible')){
+            if (commentDiv.classList.contains('is-visible')) {
                 self.innerText = `Hide ${story.descendants > 1 ? `${story.descendants} comments`  : `${story.descendants} comment`}`;
+                if (story.text == undefined) {
+                } else {
+                    self.innerText += ' and Post Text.';
+                };/*if*/
                 show(commentDiv);
             } else {
                 self.innerText = `View ${story.descendants > 1 ? `${story.descendants} comments`  : `${story.descendants} comment`}`;
+                if (story.text == undefined) {
+                } else {
+                    self.innerText += ' and Post Text.';
+                };/*if*/
                 hide(commentDiv);
-            }
-
-        });
-
-    } else{
+            };
+       });
+    } else {
         commentToggle.innerText = 'No comments';
-    }
+        if (story.text == undefined) {
+            commentToggle.innerText += ' and No Post Text.';
+        };/*if*/
+    };/*if*/
 
     // create the save "button"
     let saveButton = document.createElement('span');
@@ -461,7 +467,7 @@ function createStoryCard(story){
     //add links element
     subtext.append(score, ' by ', authorSpan, ' ', timeElapse, ' | ', commentToggle);
 
-}
+};/*createStoryCard*/
 
 function createCommentsCard(story){
 
@@ -509,42 +515,51 @@ function getDomain(url){
 }
 
 // change navigation between the different feeds
-function changeNav(){
-    for(var item of navItems){
+function changeNav() {
+
+    for (var item of navItems){
         item.classList.remove('selected');
-    }
+    };/*for loop*/
 
     clearStoryContainer();
 
     this.className += ' selected';
-    console.log(this.id);
+    console.log('Change NAV, ID:', this.id);
 
     switch (this.id) {
         case 'top':
+            console.log('User has clicked on Top.');
             getStories(TOPSTORIES);
             break;
         case 'new':
+            console.log('User has clicked on New.');
             getStories(NEWSTORIES);
             break;
         case 'best':
+            console.log('User has clicked on Best.');
             getStories(BESTSTORIES);
             break;
         case 'ask':
+            console.log('User has clicked on Ask.');
             getStories(ASKSTORIES);
             break;
         case 'show':
+            console.log('User has clicked on Show.');
             getStories(SHOWSTORIES);
             break;
         case 'jobs':
+            console.log('User has clicked on Jobs.');
             getStories(JOBSTORIES);
             break;
         case 'saved':
+            console.log('User has clicked on Saved.');
             getSavedStories();
             break;
         default:
+            console.log('Switch ... default.');
             getStories(TOPSTORIES);
-    }
-}
+    };/*switch*/
+};/*changeNav*/
 
 var show = function(elem) {
     elem.classList.add('is-visible');
