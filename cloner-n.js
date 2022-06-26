@@ -372,7 +372,7 @@ function createStoryCard(story){
         // set the url to the story itself
         var url = `https://hacker-news.firebaseio.com/v0/item/${story.id}.json`
         domain.textContent = `(${getDomain(url)})`;
-        storyTitle.setAttribute('href', url);
+        storyTitle.setAttribute('href', url);   
         storyCard.classList.add('self-story');
     }
 //

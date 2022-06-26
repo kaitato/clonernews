@@ -1,14 +1,9 @@
-
-
-
-
 html{
-    font-family: 'arial', sans-serif;
+    font-family: 'arial';
    
     background: #fff;
     overflow-y: scroll;
 }
-
 body{
     --hn-orange: #000000;
     --comment-0: #1e0530;
@@ -17,15 +12,16 @@ body{
     --comment-3: #8d68a7;
     --comment-4: #7839a8;
 }
-
 #base{
-    
     max-width: 1500px;
     margin: 0 auto; 
     padding: 0 .25rem;
 }
-
-
+h1{
+    font-size: 8vh;
+	color: black;
+	margin-block: auto;
+    }
 nav ul{
     list-style-type: none;
     display: flex;
@@ -33,9 +29,9 @@ nav ul{
     flex-wrap: wrap;
     justify-content: space-evenly;
     padding: 0;
-    background:#5956a7;
+    background:#da0f0f;
+    border-radius: 2vh;
 }
-
 nav ul li{
     padding: .5rem .8rem;
     color: #f2f2f2;
@@ -46,18 +42,19 @@ nav ul li.selected{
 }
 
 nav ul li:hover{
-    background: #808080;
+    background: navy;
     cursor: pointer;
 }
 
 .update-time{
     text-align: right;
 	font-size: 1rem;
-	color: darkorange;
+    color:#da0f0f;
     margin-top:-100px;
     margin-bottom:100px;
+    font-weight: bold;
 }
-}
+
 pre{
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -93,7 +90,7 @@ nav{
     font-size: 30px;
 }
 a {
-    color: rgb(73, 142, 96);
+    color: rgb(0, 0, 0);
     text-decoration: none;
   }
 .title:hover{
@@ -105,6 +102,8 @@ color: #5e8364;
 
 .subtext{
     font-size: 1.2rem;
+    color: #000000;
+    font-weight: 700;
 }
 
 .save{
@@ -135,20 +134,23 @@ color: #5e8364;
 
 
 .self-text{
-    background: #dadada;
+    background: #ddc7c7;
     padding: .5rem;
-    font-size: .9rem;
+    font-size: 1rem;
     margin: .5rem 0;
     border: 1px solid #808080;
+    border-radius: 2vh;
+    font-weight: bold;
 }
 
 .comment{
     margin: 0.5rem 0;
 	padding: 0.5rem;
-	font-size: 1.5rem;
+	font-size: .8rem;
 	border: 1px solid #dadada;
 	border-left: 2px solid var(--comment-0);
-	background: #fff;
+	background: rgb(218, 209, 209);
+    border-radius: 2vh;
 }
 
 

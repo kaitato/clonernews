@@ -80,8 +80,8 @@ function displayHTML() {
     for (idx2=0;idx2 < posts.length; idx2++) {
       let element = document.createElement('div');
       element.id = posts[idx2].id;
-      let titleclone = document.createElement('span');
-      titleclone.innerHTML = '<strong><i><a href="#" >CloneNews-leaks</a></i></strong><br/><span style="color:red;">live-headlines</span>';
+      // let titleclone = document.createElement('span');
+      // titleclone.innerHTML = '<strong><i><a href="#" >CloneNews-leaks</a></i></strong><br/><span style="color:red;">live-headlines</span>';
       let title = document.createElement('h3');
       title.style.fontSize = "30px";
       title.textContent = 'Title: ' + posts[idx2].title;
