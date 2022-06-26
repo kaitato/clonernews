@@ -8,3 +8,12 @@ h1{
     color: red;
     text-underline-position: below;
 }
+
+p{
+    color : "#3d7897";
+    font-family: Arial, Helvetica, sans-serif;
+ text-align: justify;
+ font-Size: "30px";
+ 
+  line-Height: "25px";
+}

@@ -1,39 +1,32 @@
 function fetchingById(id) {
-  return fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then((resp)=>resp.json()).then(loadData)
+  return fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then((resp)=>resp.json()).then(loadNewsData)
 }
 
 let posts = []
 
 
-const loadData = cost => {
+const loadNewsData = article => {
   let element = document.createElement('div')
-  element.id = cost.id
+  element.id = article.id
   let titleclone = document.createElement('span')
   
-titleclone.innerHTML = '<strong><i><a href="#" >CloneNews-leaks</a></i></strong><br/><span style="color:red;">live-headlines</span>';
+// titleclone.innerHTML = '<strong><i><a href="#" >CloneNews-leaks</a></i></strong><br/><span style="color:red;">live-headlines</span>';
   let title = document.createElement('h3')
-  title.style.fontSize = "30px";
-  title.textContent = cost.title
+   title.textContent = article.title
   let text = document.createElement('p')
-  text.style.color = "#3d7897";
-  text.style.fontFamily = "Arial";
-  text.style.textAlign = "justify";
-  text.style.lineHeight = "25px";
-  text.textContent = cost.text
+   text.textContent = article.text
   let type = document.createElement('p')
-  type.textContent = cost.type
+  type.textContent = article.type
   let pool = document.createElement('p')
-  pool.textContent = cost.pool
+  pool.textContent = article.pool
   element.appendChild(titleclone)
   element.appendChild(title)
   element.appendChild(text)
   element.appendChild(type)
   element.appendChild(pool)
  
- 
-  
-
-  let unix_timestamp = cost.time
+  let unix_timestamp = article.time
+  console.log("orig timestamp-",unix_timestamp)
   // Create a new JavaScript Date object based on the timestamp
   // multiplied by 1000 so that the argument is in milliseconds, not seconds.
   var date = new Date(unix_timestamp * 1000);
@@ -52,8 +45,8 @@ titleclone.innerHTML = '<strong><i><a href="#" >CloneNews-leaks</a></i></strong>
   console.log(formattedTime);
 
   document.body.appendChild(element)
-  console.log(cost)
-  posts.push(cost)
+  console.log(article)
+  posts.push(article)
 }
   
 const urls = [
@@ -66,10 +59,10 @@ const urls = [
 
 
 const ask1url = 'https://hacker-news.firebaseio.com/v0/askstories.json';
-const showurl = 'https://hacker-news.firebaseio.com/v0/askstories.json';
-const jobsurl = 'https://hacker-news.firebaseio.com/v0/askstories.json';
-const top1url = 'https://hacker-news.firebaseio.com/v0/askstories.json';
-const updsurl = 'https://hacker-news.firebaseio.com/v0/askstories.json';
+const showurl = 'https://hacker-news.firebaseio.com/v0/showstories.json';
+const jobsurl = 'https://hacker-news.firebaseio.com/v0/jobstories.json';
+const top1url = 'https://hacker-news.firebaseio.com/v0/topstories.json';
+const updsurl = 'https://hacker-news.firebaseio.com/v0/updates.json';
 
 // let askstory= urls.map(url=>fetch(url)).length
 // console.log(askstory);
@@ -83,11 +76,12 @@ const  results=await Promise.all([
   fetch(top1url),
   fetch(updsurl),
 ])
-const dataPromises=results.map(results => results.json())  //.then(ids=> ids.forEach(id=>fetchingById(id)))
+const dataPromises=results.map(results => results.json().then(ids=> ids.forEach(id=>fetchingById(id))))
 const finalData= await Promise.all(dataPromises);
+// console.log("Finaldata length",finalData.length)
 // Alternate way of writing  const finalData=await Promise.all(results.map(results=>results.json().then(ids=> ids.forEach(id=>fetchingById(id)))));
 //console.log(finalData);
-return(finalData)
+// return(finalData)
 } catch (err){
 console.error(err);
 }
@@ -95,5 +89,5 @@ console.error(err);
 
 (async ()=>{
   const data = await LoadData();
-  console.log(data)
+  // console.log(data)
 })();
