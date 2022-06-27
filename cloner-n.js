@@ -269,7 +269,7 @@ function getComment(commentId, commentCard){
 };/*getComment*/
 
 function createComment(commentData, parentCard){
-    if(!commentData.deleted){
+    if (!commentData.deleted){
         let commentDiv = document.createElement('div');
         commentDiv.setAttribute('class', 'comment');
         commentDiv.classList.add('is-visible');
@@ -289,7 +289,7 @@ function createComment(commentData, parentCard){
         commentsDiv.classList.add('comments');
         commentsDiv.classList.add('is-visible');
         
-        if(commentData.kids){
+        if (commentData.kids){
             commentToggle.innerText = `Hide ${commentData.kids.length > 1 ? `${commentData.kids.length} comments`  : `${commentData.kids.length} comment`}`;
             commentToggle.classList.add('has-comments');
             
@@ -298,24 +298,24 @@ function createComment(commentData, parentCard){
                 var storyDiv = this.parentNode.parentNode;
                 var children = storyDiv.querySelectorAll('.comment');
                 children.forEach(element => {
-                    if(element.classList.contains('is-visible')){
+                    if (element.classList.contains('is-visible')){
                         self.innerText = `View ${commentData.kids.length > 1 ? `${commentData.kids.length} comments`  : `${commentData.kids.length} comment`}`;
                         hide(element);
-                    } else{
+                    } else {
                         self.innerText = `Hide ${commentData.kids.length > 1 ? `${commentData.kids.length} comments`  : `${commentData.kids.length} comment`}`;
                         show(element);
-                    }
+                    }/*if*/
                 });
             });
 
-            for(var item of commentData.kids){
+            for (var item of commentData.kids){
                 getComment(item, commentsDiv);
-            }
+            }/*for loop*/
 
-        } else{
+        } else {
             commentToggle.innerText = 'No comments';
-        }
-        
+        }/*if*/
+
         let authorSpan = document.createElement('span');
         let author = document.createElement('a');
         //https://hacker-news.firebaseio.com/v0/user/jl.json?print=pretty
