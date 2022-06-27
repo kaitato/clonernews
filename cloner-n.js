@@ -169,6 +169,21 @@ async function getStories(feed){
             if (feed == POLLSTORIES) {
                 console.log(`Get Stories → Poll Stories Data: ${data}`);
                 /*Item ID: 31896520 is the Max Item ID*/
+                /*Item ID: 31587976 is a Poll Item*/
+                idx = 31587976;
+                getPollsItems(idx);
+                /*Item ID: 31598236 is a Poll Item*/
+                idx = 31598236;
+                getPollsItems(idx);
+                /*Item ID: 31716715 is a Poll Item*/
+                idx = 31716715;
+                getPollsItems(idx);
+                /*Item ID: 31780911 is a Poll Item*/
+                idx = 31780911;
+                getPollsItems(idx);
+                /*Item ID: 31788898 is a Poll Item*/
+                idx = 31788898;
+                getPollsItems(idx);
                 /*Item ID: 31891675 is a Poll Item*/
                 idx = 31891675;
                 getPollsItems(idx);
@@ -179,9 +194,9 @@ async function getStories(feed){
                 idx = 31869061;
                 getPollsItems(idx);
                 /*Item ID: 31867399 is a Poll Item*/
-                idx = 31867399;
-                getPollsItems(idx);
-                nextItemID = 31895001 - (10000 * 5);
+                /*idx = 31867399;
+                getPollsItems(idx);*/
+                /*nextItemID = 31895001 - (10000 * 5);*/
                 /*for (idx = nextItemID; idx > (nextItemID-10000); idx--){
                     getPollsItems(idx);
                 };/*for loop*/
