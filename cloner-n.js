@@ -9,6 +9,7 @@ const BESTSTORIES = 'beststories.json';
 const ASKSTORIES = 'askstories.json';
 const SHOWSTORIES = 'showstories.json';
 const JOBSTORIES = 'jobstories.json';
+const POLLSTORIES = 'maxitem.json';
 
 /* Top Navigation elements */
 const topNav = document.getElementById('top');
@@ -76,14 +77,12 @@ const getNiceTime = (timestamp) => {
 function updateLastUpdate() {
     var updatedTimeDiv;
 
-    if(container.querySelector('.update-time')){
+    if (container.querySelector('.update-time')){
         updatedTimeDiv = container.querySelector('.update-time');
-    } else{
+    } else {
         updatedTime = document.createElement('div');
         updatedTime.classList.add('update-time');
-        
-    }
-
+    };/*if*/
     var now = new Date();
     updatedTime.innerText = `Last updated: ${getNiceTime(now.getTime() / 1000)}`;
     container.appendChild(updatedTime);
@@ -156,8 +155,10 @@ function createdSavedStoryCard(record){
     return recordCard;
 };/*createdSavedStoryCard*/
 
-// get the top HN stories asynchronously.
+// get the Hacker News stories asynchronously.
 async function getStories(feed){
+ var idx = 0;
+ var nextItemID = 0;
     fetch(BASEURL + feed)
         .then(response => {
             console.log(`Get Stories → Response:`, response);
@@ -165,11 +166,32 @@ async function getStories(feed){
         })
         .then(data => {
             console.log(`Get Stories → Number of Stories: ${data.length}`);
-            updateLastUpdate();
-            //limit for now
-            for(let i = 0; i < data.length && i < 50 ; i++){
-                getStoryDetails(data[i]);
-            }
+            if (feed == POLLSTORIES) {
+                console.log(`Get Stories → Poll Stories Data: ${data}`);
+                /*Item ID: 31896520 is the Max Item ID*/
+                /*Item ID: 31891675 is a Poll Item*/
+                idx = 31891675;
+                getPollsItems(idx);
+                /*Item ID: 31869104 is a Poll Item*/
+                idx = 31869104;
+                getPollsItems(idx);
+                /*Item ID: 31869061 is a Poll Item*/
+                idx = 31869061;
+                getPollsItems(idx);
+                /*Item ID: 31867399 is a Poll Item*/
+                idx = 31867399;
+                getPollsItems(idx);
+                nextItemID = 31895001 - (10000 * 5);
+                /*for (idx = nextItemID; idx > (nextItemID-10000); idx--){
+                    getPollsItems(idx);
+                };/*for loop*/
+            } else {
+                updateLastUpdate();
+                //limit for now
+                for (let i = 0; i < data.length && i < 50 ; i++) {
+                    getStoryDetails(data[i]);
+                };/*for loop*/
+             };/*if*/
         })
         .catch(err => {
             console.log('Error fetching ' + err);
@@ -194,6 +216,27 @@ function getStoryDetails(itemId){
             console.log(`Error fetching story ${itemId} with ${err}`);
         });
 };/*getStoryDetails*/
+
+// get top-level details about a Poll
+async function getPollsItems(itemId){
+    let pollURL = `https://hacker-news.firebaseio.com/v0/item/${itemId}.json`
+
+    fetch(pollURL)
+        .then(response => {
+            /*console.log(`Get Polls Items → Response:`, response);*/
+            return response.json();
+        })
+        .then(data => {
+            if (data.type == 'poll') {
+                console.log(`Get Poll Items → Item ID: ${itemId}; Data: ${data.title}`);
+                createStoryCard(data);
+                stories.push(data);
+            };/*if*/
+        })
+        .catch(err => {
+            console.log(`Error fetching Poll Item ${itemId} with ${err}`);
+        });
+};/*getPollsItems*/
 
 function getComment(commentId, commentCard){
     let url = `https://hacker-news.firebaseio.com/v0/item/${commentId}.json`
@@ -539,9 +582,9 @@ function changeNav() {
             console.log('User has clicked on Best.');
             getStories(BESTSTORIES);
             break;
-        case 'ask':
-            console.log('User has clicked on Ask.');
-            getStories(ASKSTORIES);
+        case 'poll':
+            console.log('User has clicked on Polls.');
+            getStories(POLLSTORIES);
             break;
         case 'show':
             console.log('User has clicked on Show.');
